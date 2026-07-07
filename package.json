@@ -32,7 +32,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "bin"
   ],
   "scripts": {
     "build": "tsup",
@@ -50,5 +51,8 @@
     "tsup": "8.0.2",
     "typescript": "5.3.3",
     "vitest": "^2.1.9"
+  },
+  "bin": {
+    "xmr-bio": "bin/xmr-bio.mjs"
   }
 }

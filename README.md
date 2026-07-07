@@ -96,6 +96,24 @@ const oa = await bio.openalias('xbtoshi');
 // { fqdn: 'xbtoshi.xmr.bio', type: 'TXT', content: 'oa1:xmr recipient_address=…;' }
 ```
 
+## CLI
+
+The package ships an `xmr-bio` binary — resolve identities from the terminal or
+a shell script (no install needed via `npx`):
+
+```bash
+npx @kyc-rip/xmr-bio-sdk resolve xbtoshi
+npx @kyc-rip/xmr-bio-sdk address xbtoshi           # bare address — pipe it into a wallet
+npx @kyc-rip/xmr-bio-sdk openalias xbtoshi
+npx @kyc-rip/xmr-bio-sdk meta
+npx @kyc-rip/xmr-bio-sdk agent-register agent-mybot 4YourAddr   # prints a fresh key
+
+# scriptable: pay whoever @alice is, verified end-to-end
+xmr-wallet transfer "$(npx -y @kyc-rip/xmr-bio-sdk address alice)" 0.1
+```
+
+Flags: `--base <url>`, `--json`, `--key <hex>`.
+
 ## API
 
 | Method | Returns |
