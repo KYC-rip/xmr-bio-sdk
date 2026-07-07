@@ -1,0 +1,49 @@
+{
+  "name": "@kyc-rip/xmr-bio-sdk",
+  "version": "0.1.0",
+  "description": "Client for the xmr.bio identity layer — resolve verified Monero addresses, verify signed resolutions, register agents, and post XMR402 paid messages.",
+  "homepage": "https://xmr.bio",
+  "repository": {
+    "url": "https://github.com/KYC-rip/xmr-bio-sdk.git"
+  },
+  "publisher": "KYC.rip",
+  "keywords": [
+    "monero",
+    "xmr",
+    "xmr.bio",
+    "identity",
+    "openalias",
+    "xmr402",
+    "ai-agents",
+    "resolver",
+    "ed25519",
+    "nostr"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "XBToshi",
+  "license": "MIT",
+  "dependencies": {
+    "@noble/curves": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.0.0",
+    "tsup": "8.0.2",
+    "typescript": "5.3.3"
+  }
+}
