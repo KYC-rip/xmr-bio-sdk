@@ -1,10 +1,14 @@
 {
   "name": "@kyc-rip/xmr-bio-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Client for the xmr.bio identity layer — resolve verified Monero addresses, verify signed resolutions, register agents, and post XMR402 paid messages.",
   "homepage": "https://xmr.bio",
   "repository": {
-    "url": "https://github.com/KYC-rip/xmr-bio-sdk.git"
+    "type": "git",
+    "url": "git+https://github.com/KYC-rip/xmr-bio-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KYC-rip/xmr-bio-sdk/issues"
   },
   "publisher": "KYC.rip",
   "keywords": [
