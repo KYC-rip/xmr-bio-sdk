@@ -38,7 +38,6 @@ Usage:
   xmr-bio address <handle>              print just the verified Monero address
   xmr-bio openalias <handle>            print the OpenAlias TXT record
   xmr-bio profile <handle>              raw public profile
-  xmr-bio messages <handle>             the paid message board
   xmr-bio meta                          service descriptor + signing key
   xmr-bio agent-register <handle> <addr> [--key <hex>]
                                         register an agent (generates a key if none given)
@@ -78,11 +77,6 @@ async function main() {
     case 'profile': {
       const p = await bio.profile(need(rest[0], 'handle'));
       out(flags, `@${p.handle} — ${p.display_name}\n${p.address}`, p);
-      break;
-    }
-    case 'messages': {
-      const msgs = await bio.messages(need(rest[0], 'handle'));
-      out(flags, msgs.map((m) => `${new Date(m.timestamp).toISOString()}  ${(m.amount / 1e12).toFixed(4)} XMR  ${m.sender}: ${m.content}`).join('\n') || '(no messages)', msgs);
       break;
     }
     case 'meta': {

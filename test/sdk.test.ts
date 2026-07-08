@@ -7,7 +7,6 @@ import {
   generateAgentKey,
   registerAgent,
   agentRegisterMessage,
-  postPaidMessage,
   type SignedResolution,
 } from '../src/index.js';
 
@@ -127,37 +126,5 @@ describe('registerAgent', () => {
     await expect(registerAgent({ handle: 'alice', address: '4A', privateKey: bytesToHex(ed25519.utils.randomSecretKey()), fetch: fetchImpl }))
       .rejects.toThrow(/agent-/);
     expect((fetchImpl as unknown as ReturnType<typeof vi.fn>)).not.toHaveBeenCalled();
-  });
-});
-
-// ── postPaidMessage ──────────────────────────────────────────────────
-
-describe('postPaidMessage', () => {
-  it('parses a 402 challenge from WWW-Authenticate', async () => {
-    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ error: 'PAYMENT_REQUIRED' }), {
-      status: 402,
-      headers: { 'WWW-Authenticate': 'XMR402 address="4CREATOR", amount="1000000000", message="deadbeefcafe", timestamp="123"' },
-    })) as unknown as typeof fetch;
-
-    const r = await postPaidMessage({ handle: 'alice', content: 'gm', fetch: fetchImpl });
-    expect(r.kind).toBe('402-challenge');
-    if (r.kind === '402-challenge') {
-      expect(r.address).toBe('4CREATOR');
-      expect(r.amountPiconero).toBe(1_000_000_000);
-      expect(r.nonce).toBe('deadbeefcafe');
-    }
-  });
-
-  it('sends the XMR402 Authorization header when a proof is supplied', async () => {
-    let authHeader: string | null = null;
-    const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => {
-      authHeader = new Headers(init!.headers).get('Authorization');
-      return jsonResponse({ success: true, message: { id: 'm1', sender: 'bob', content: 'gm', amount: 1e9, tx_hash: 'TX:abc', timestamp: 1 } });
-    }) as unknown as typeof fetch;
-
-    const r = await postPaidMessage({ handle: 'alice', content: 'gm', proof: { txid: 'abc', proof: 'PROOF' }, fetch: fetchImpl });
-    expect(authHeader).toBe('XMR402 txid="abc", proof="PROOF"');
-    expect(r.kind).toBe('posted');
-    if (r.kind === 'posted') expect(r.message.tx_hash).toBe('TX:abc');
   });
 });

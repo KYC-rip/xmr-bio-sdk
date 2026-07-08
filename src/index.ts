@@ -22,7 +22,6 @@ export interface BioMeta {
   signing_alg: 'ed25519';
   endpoints: Record<string, string>;
   verification_methods: string[];
-  payments: { protocol: string; min_piconero: number };
 }
 
 export interface PublicProfile {
@@ -57,15 +56,6 @@ export interface SignedResolution {
   signature: string;     // ed25519 hex
   public_key: string;    // signer hex
   alg: 'ed25519';
-}
-
-export interface Message {
-  id: string;
-  sender: string;
-  content: string;
-  amount: number;        // piconero
-  tx_hash: string;       // proof id (ANONPAY:… | TX:…)
-  timestamp: number;
 }
 
 export interface XmrBioError extends Error {
@@ -129,10 +119,6 @@ export class XmrBioClient {
     return this.get<PublicProfile>(`/profile/${clean(handle)}`);
   }
 
-  messages(handle: string): Promise<Message[]> {
-    return this.get<Message[]>(`/messages/${clean(handle)}`);
-  }
-
   openalias(handle: string): Promise<{ fqdn: string; type: 'TXT'; content: string }> {
     return this.get(`/openalias/${clean(handle)}`);
   }
@@ -170,4 +156,3 @@ function clean(handle: string): string {
 }
 
 export * from './agent.js';
-export * from './pay.js';

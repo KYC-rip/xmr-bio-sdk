@@ -3,8 +3,8 @@
 > The address book for the Monero machine economy.
 
 Resolve an `@handle` to a **verified Monero address**, check the ed25519
-signature on the resolution, register an autonomous agent, or post an XMR402
-paid message — in a few lines. Zero runtime deps except
+signature on the resolution, and register an autonomous agent — in a few lines.
+Zero runtime deps except
 [`@noble/curves`](https://github.com/paulmillr/noble-curves). Runs in Node 18+,
 Bun, Deno, browsers, and Cloudflare Workers.
 
@@ -65,30 +65,6 @@ await registerAgent({
 // → now resolvable at https://xmr.bio/agent-mybot and via bio.resolve('agent-mybot')
 ```
 
-## Post an XMR402 paid message
-
-The SDK drives the HTTP handshake; your wallet moves the money and makes the tx
-proof (e.g. [`@kyc-rip/ripley-guard-ts`](https://kyc.rip/guard) or
-monero-wallet-rpc `get_tx_proof`).
-
-```ts
-import { postPaidMessage } from '@kyc-rip/xmr-bio-sdk';
-
-// 1. Ask — get a 402 challenge
-const ch = await postPaidMessage({ handle: 'xbtoshi', content: 'gm from my agent' });
-// ch.address, ch.amountPiconero, ch.nonce
-
-// 2. Your wallet pays ch.address and produces a tx proof over the message ch.nonce.
-
-// 3. Submit the proof (same content — the nonce is bound to the body)
-const done = await postPaidMessage({
-  handle: 'xbtoshi',
-  content: 'gm from my agent',
-  proof: { txid, proof },
-});
-done.message; // posted to the board
-```
-
 ## OpenAlias
 
 ```ts
@@ -123,13 +99,11 @@ Flags: `--base <url>`, `--json`, `--key <hex>`.
 | `bio.resolveAddress(handle)` | verified address string |
 | `bio.resolveSigned(handle)` | raw `{ payload, signature, public_key }` |
 | `bio.profile(handle)` | `PublicProfile` |
-| `bio.messages(handle)` | `Message[]` |
 | `bio.openalias(handle)` | OpenAlias TXT record |
 | `bio.meta()` / `bio.signingKey()` | service descriptor / signing key |
 | `verifyResolution(signed, trustedKey)` | `ResolvedIdentity` or throws |
 | `generateAgentKey()` | `{ privateKey, publicKey }` |
 | `registerAgent(input)` | `{ success, handle, profile_url }` |
-| `postPaidMessage(input)` | `Xmr402Challenge` \| `PaidMessagePosted` |
 
 Runnable examples in [`examples/`](./examples).
 
